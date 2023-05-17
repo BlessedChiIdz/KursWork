@@ -1,0 +1,17 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:KursWork.Views.Controls">
+  <Design.PreviewWith>
+    <controls:And />
+  </Design.PreviewWith>
+
+  <Style Selector="controls|And">
+    <!-- Set Defaults -->
+    <Setter Property="Template">
+      <ControlTemplate>
+		  
+        <Rectangle Height="50" Width="100" Stroke="Black" Fill="Pink"/>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+</Styles>

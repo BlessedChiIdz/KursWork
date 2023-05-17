@@ -1,0 +1,18 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:KursWork.Views.Controls">
+  <Design.PreviewWith>
+    <controls:NotContrl/>
+  </Design.PreviewWith>
+
+  <Style Selector="controls|NotContrl">
+    <Setter Property="Template">
+      <ControlTemplate>
+		  <Canvas>
+		    <Ellipse Height="50" Width="100" Stroke="Black" Fill="Pink"/>
+		    <Rectangle Height="20" Width="100" Stroke="Black" Fill="Pink"/>
+		 </Canvas>
+	    </ControlTemplate>
+    </Setter>
+  </Style>
+</Styles>
