@@ -11,6 +11,7 @@ namespace KursWork.Views
 {
     public partial class MainWindow : Window
     {
+        private Point point5 = new Point(5, 5);
         private int globalFlag;
         private int Num = 0;
         private DModel startDMod = new DModel();
@@ -56,6 +57,14 @@ namespace KursWork.Views
                         nt.StartPoint = point;
                         mw.COLL.Add(nt);
                     }
+                    if (mw.SelScheme == 3)
+                    {
+                        XoR xr = new XoR();
+                        Point point = currentPointPos;
+                        xr.Numb = Num;
+                        xr.StartPoint = point;
+                        mw.COLL.Add(xr);
+                    }
                     Num++;
                 }
                 if (args.Source is Image img)
@@ -73,6 +82,13 @@ namespace KursWork.Views
                         DefPoint = currentPointPos;
                         this.PointerMoved += NewLink;
                         this.PointerReleased += StopLink;
+                    }
+                }
+                if(args.Source is Line line)
+                {
+                    if(line.DataContext is Link link)
+                    {
+                        mw.SelLink = link;
                     }
                 }
             }
@@ -99,30 +115,30 @@ namespace KursWork.Views
                                 {
                                     if(link.SInpNumb == 0)
                                     {
-                                        link.FPoint = dmod.FStartPoint;
+                                        link.FPoint = dmod.FStartPoint + point5;
                                     }
                                     if (link.SInpNumb == 1)
                                     {
-                                        link.FPoint = dmod.SStartPoint;
+                                        link.FPoint = dmod.SStartPoint + point5;
                                     }
                                     if (link.SInpNumb == 2)
                                     {
-                                        link.FPoint = dmod.OStartPoint;
+                                        link.FPoint = dmod.OStartPoint + point5;
                                     }
                                 }
                                 if (dmod.Numb == link.ELinkNumb)
                                 {
                                     if (link.EInpNumb == 0)
                                     {
-                                        link.SPoint = dmod.FStartPoint;
+                                        link.SPoint = dmod.FStartPoint + point5;
                                     }
                                     if (link.EInpNumb == 1)
                                     {
-                                        link.SPoint = dmod.SStartPoint;
+                                        link.SPoint = dmod.SStartPoint + point5;
                                     }
                                     if (link.EInpNumb == 2)
                                     {
-                                        link.SPoint = dmod.OStartPoint;
+                                        link.SPoint = dmod.OStartPoint + point5;
                                     }
                                 }
                             }

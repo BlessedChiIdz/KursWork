@@ -12,6 +12,8 @@
     <None Remove=".gitignore" />
     <None Remove="Assets\2023-05-17_04-06-11.png" />
     <None Remove="Assets\2023-05-19_02-22-37.png" />
+    <None Remove="Assets\2023-05-19_03-08-57.png" />
+    <None Remove="Assets\2023-05-19_03-26-52.png" />
   </ItemGroup>
   <ItemGroup>
     <!--This helps with theme dll-s trimming.
