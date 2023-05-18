@@ -29,15 +29,44 @@
 
 				<ItemsControl.DataTemplates>
 					<DataTemplate DataType="{x:Type model:AndM}">
-						<Ellipse Height="50" Width="100" Stroke="Black" Fill="Black">
-							<Ellipse.RenderTransform>
-								<TransformGroup>
-									<TranslateTransform
-										X="{Binding StartPoint.X}"
-										Y="{Binding StartPoint.Y}"/>
-								</TransformGroup>
-							</Ellipse.RenderTransform>
-						</Ellipse>
+						<Canvas>
+							<Image Source="C:\Users\Rik\source\repos\KursWork\KursWork\Assets\2023-05-19_02-22-37.png">
+								<Image.RenderTransform>
+									<TransformGroup>
+										<TranslateTransform
+											X="{Binding StartPoint.X}"
+											Y="{Binding StartPoint.Y}"/>
+									</TransformGroup>
+								</Image.RenderTransform>
+							</Image>
+							<Rectangle Height="10" Width="10" Stroke="Black" Fill="Black">
+								<Rectangle.RenderTransform>
+									<TransformGroup>
+										<TranslateTransform
+											X="{Binding FStartPoint.X}"
+											Y="{Binding FStartPoint.Y}"/>
+									</TransformGroup>
+								</Rectangle.RenderTransform>
+							</Rectangle>
+							<Rectangle Height="10" Width="10" Stroke="Black" Fill="Black">
+								<Rectangle.RenderTransform>
+									<TransformGroup>
+										<TranslateTransform
+											X="{Binding SStartPoint.X}"
+											Y="{Binding SStartPoint.Y}"/>
+									</TransformGroup>
+								</Rectangle.RenderTransform>
+							</Rectangle>
+							<Rectangle Height="10" Width="10" Stroke="Black" Fill="Black">
+								<Rectangle.RenderTransform>
+									<TransformGroup>
+										<TranslateTransform
+											X="{Binding OStartPoint.X}"
+											Y="{Binding OStartPoint.Y}"/>
+									</TransformGroup>
+								</Rectangle.RenderTransform>
+							</Rectangle>
+						</Canvas>
 					</DataTemplate>
 
 
@@ -83,7 +112,13 @@
 					</DataTemplate>
 
 
-					<DataTemplate DataType="{x:Type model:NoT}">
+					<DataTemplate DataType="{x:Type model:Link}">
+						<Line StartPoint="{Binding FPoint}" 
+							  EndPoint="{Binding SPoint}"
+							  Stroke="Coral"
+							  StrokeThickness="5"
+							  />
+							
 						
 					</DataTemplate>
 					

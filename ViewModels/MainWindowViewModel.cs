@@ -10,11 +10,11 @@ namespace KursWork.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
-        private ObservableCollection<DModel> Coll;
+        private ObservableCollection<DFigure> Coll;
         private int selScheme = 0;
         public MainWindowViewModel(MainWindow mw)
         {
-            Coll = new ObservableCollection<DModel>();
+            Coll = new ObservableCollection<DFigure>();
         }
         void SetAnd()
         {
@@ -32,7 +32,7 @@ namespace KursWork.ViewModels
         {
             get => selScheme;
         }
-        public ObservableCollection<DModel> COLL
+        public ObservableCollection<DFigure> COLL
         {
             get => Coll;
             set => SetProperty(ref Coll, value);
