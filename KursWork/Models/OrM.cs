@@ -13,19 +13,9 @@ namespace KursWork.Models
         
         private bool _out;
 
-        public static bool Logic(bool a, bool b)
+        public override bool Logic()
         {
-            return a | b;
-        }
-        
-        public bool OP
-        {
-            get => _out;
-            set
-            {
-                bool res = Logic(SInp, FInp);
-                SetProperty(ref _out, res);
-            }
+            return FInp | SInp;
         }
         public string Name
         {

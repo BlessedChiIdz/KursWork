@@ -34,6 +34,14 @@ namespace KursWork.ViewModels
         {
             selScheme = 3;
         }
+        void VSourse()
+        {
+            selScheme = 4;
+        }
+        void OutPut()
+        {
+            selScheme = 5;
+        }
         void DelLink()
         {
             COLL.Remove(SelLink);

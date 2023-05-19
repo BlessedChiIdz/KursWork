@@ -11,6 +11,7 @@ namespace KursWork.Models
         private bool _fInpC;
         private bool _sInpC;
         private bool _oInpC;
+        private bool _out;
         private Point _finpP;
         private Point startPoint;
         private Point _sinpP;
@@ -75,6 +76,15 @@ namespace KursWork.Models
                 temp = new Point(75, 28);
                 OStartPoint = StartPoint + temp;
             } 
+        }
+        public virtual bool Logic()
+        {
+            return false;
+        }
+        public virtual bool BOut
+        {
+            get => _out;
+            set => SetProperty(ref _out, value);
         }
     }
 }

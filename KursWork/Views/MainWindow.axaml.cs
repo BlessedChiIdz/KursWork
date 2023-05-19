@@ -65,6 +65,14 @@ namespace KursWork.Views
                         xr.StartPoint = point;
                         mw.COLL.Add(xr);
                     }
+                    if (mw.SelScheme == 4)
+                    {
+                        VSourse xr = new VSourse();
+                        Point point = currentPointPos;
+                        xr.Numb = Num;
+                        xr.StartPoint = point;
+                        mw.COLL.Add(xr);
+                    }
                     Num++;
                 }
                 if (args.Source is Image img)
@@ -280,10 +288,16 @@ namespace KursWork.Views
                                 }
                             }
                         }
-                        
+                        if (flag == true)
+                        {
+                            if (startDMod.BOut == true && link.EInpNumb == 0) dModel.FInp = true;
+                            if (startDMod.BOut == true && link.EInpNumb == 1) dModel.SInp = true;
+                            dModel.BOut = dModel.Logic();
+                        }
                     }
                 }
                 if (flag == false) mw.COLL.Remove(link);
+                
             }
                 this.PointerReleased -= StopLink;
         }
