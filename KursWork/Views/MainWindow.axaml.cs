@@ -73,6 +73,15 @@ namespace KursWork.Views
                         xr.StartPoint = point;
                         mw.COLL.Add(xr);
                     }
+                    if (mw.SelScheme == 5)
+                    {
+                        Lamp xr = new Lamp();
+                        xr.VisibleQ = false;
+                        Point point = currentPointPos;
+                        xr.Numb = Num;
+                        xr.StartPoint = point;
+                        mw.COLL.Add(xr);
+                    }
                     Num++;
                 }
                 if (args.Source is Image img)
@@ -292,7 +301,14 @@ namespace KursWork.Views
                         {
                             if (startDMod.BOut == true && link.EInpNumb == 0) dModel.FInp = true;
                             if (startDMod.BOut == true && link.EInpNumb == 1) dModel.SInp = true;
+                            if (startDMod.BOut == false && link.EInpNumb == 0) dModel.FInp = false;
+                            if (startDMod.BOut == false && link.EInpNumb == 1) dModel.SInp = false;
                             dModel.BOut = dModel.Logic();
+                        }
+                        if(dModel is Lamp lamp)
+                        {
+                            if (lamp.FInp == true && lamp.FInpC == true) lamp.VisibleQ = true;
+                            else lamp.VisibleQ = false;
                         }
                     }
                 }

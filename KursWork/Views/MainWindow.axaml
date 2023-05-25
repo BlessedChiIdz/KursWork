@@ -215,12 +215,44 @@
 						<Line StartPoint="{Binding FPoint}" 
 							  EndPoint="{Binding SPoint}"
 							  Stroke="Coral"
-							  StrokeThickness="5"
+							  StrokeThickness="7"
 							  />
 							
 						
 					</DataTemplate>
 					
+					<DataTemplate DataType="{x:Type model:Lamp}">
+						<Canvas>
+						<Image Source="C:\\Users\\Rik\\source\repos\\KursWork\\KursWork\\Assets\\2023-05-22_02-24-03.png" IsVisible="{Binding !VisibleQ}">
+							<Image.RenderTransform>
+								<TransformGroup>
+									<TranslateTransform
+										X="{Binding StartPoint.X}"
+										Y="{Binding StartPoint.Y}"/>
+								</TransformGroup>
+							</Image.RenderTransform>
+						</Image>
+						<Image Source="C:\Users\Rik\source\repos\KursWork\KursWork\Assets\2023-05-22_02-23-44.png" IsVisible="{Binding VisibleQ}">
+							<Image.RenderTransform>
+								<TransformGroup>
+									<TranslateTransform
+										X="{Binding StartPoint.X}"
+										Y="{Binding StartPoint.Y}"/>
+								</TransformGroup>
+							</Image.RenderTransform>
+						</Image>
+							<Rectangle Height="10" Width="10" Stroke="Black" Fill="Black">
+								<Rectangle.RenderTransform>
+									<TransformGroup>
+										<TranslateTransform
+											X="{Binding FStartPoint.X}"
+											Y="{Binding FStartPoint.Y}"/>
+									</TransformGroup>
+								</Rectangle.RenderTransform>
+							</Rectangle>
+
+						</Canvas>
+					</DataTemplate>
 
 				</ItemsControl.DataTemplates>
 			</ItemsControl>
