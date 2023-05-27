@@ -306,6 +306,7 @@ namespace KursWork.Views
                                     mw.COLL.Add(link);
                                     flag = true;
                                     link.EInpNumb = 0;
+                                    link.NUM = mw.Num;
                                     if (globalFlag == 0) startDMod.FInpC = true;
                                     if (globalFlag == 1) startDMod.SInpC = true;
                                     if (globalFlag == 2) startDMod.OInpC = true;
@@ -318,6 +319,7 @@ namespace KursWork.Views
                                     mw.COLL.Add(link);
                                     flag = true;
                                     link.EInpNumb = 1;
+                                    link.NUM = mw.Num;
                                     if (globalFlag == 0) startDMod.FInpC = true;
                                     if (globalFlag == 1) startDMod.SInpC = true;
                                     if (globalFlag == 2) startDMod.OInpC = true;
@@ -330,6 +332,7 @@ namespace KursWork.Views
                                     mw.COLL.Add(link);
                                     flag = true;
                                     link.EInpNumb = 2;
+                                    link.NUM = mw.Num;
                                     if (globalFlag == 0) startDMod.FInpC = true;
                                     if (globalFlag == 1) startDMod.SInpC = true;
                                     if (globalFlag == 2) startDMod.OInpC = true;
@@ -341,6 +344,7 @@ namespace KursWork.Views
                                     link.ELinkNumb = dModel.Numb;
                                     mw.COLL.Add(link);
                                     flag = true;
+                                    link.NUM = mw.Num;
                                     link.EInpNumb = 3;
                                     if (globalFlag == 0) startDMod.FInpC = true;
                                     if (globalFlag == 1) startDMod.SInpC = true;
@@ -352,7 +356,7 @@ namespace KursWork.Views
                     }
                 }
                 if (flag == false) mw.COLL.Remove(link);
-                if (flag == true) mw.Num++;
+                if (flag == true) { mw.Num++;}
             }
                 this.PointerReleased -= StopLink;
                 if(DataContext is MainWindowViewModel mw1) mw1.ResetCOLL();

@@ -245,8 +245,7 @@ namespace KursWork.ViewModels
         {
             if(SelLink != null)
             {
-                COLL.Remove(SelLink);
-                COLL.Remove(SelLink);
+                COLL[SelLink.NUM] = null;
                 if (COLL[SelLink.SLinkNumb] is DModel dModel)
                 {
                     if (SelLink.SInpNumb == 0) { dModel.FInpC = false; }
@@ -261,10 +260,12 @@ namespace KursWork.ViewModels
                     if (SelLink.EInpNumb == 2) { dModel2.OInpC = false; }
                     if (SelLink.EInpNumb == 3 && dModel2 is Multipleks mx) { mx.SideC = false; }
                 }
-                Num--;
                 ResetCOLL();
             }
-            if (DModelForDelete != null)
+        }
+        void DelDmod()
+        {
+            if (DModelForDelete != null && COLL[DModelForDelete.Numb] is DModel)
             {
                 COLL[DModelForDelete.Numb] = null;
             }

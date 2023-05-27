@@ -11,6 +11,12 @@ namespace KursWork.Models
         private int _eLinkNum;
         private int _sinpNumb;
         private int _einpNumb;
+        private int _num;
+        public int NUM
+        {
+            get => _num;
+            set => SetProperty(ref _num, value);
+        }
         public Point FPoint
         {
             get => _fPoint;
