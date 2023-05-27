@@ -12,15 +12,16 @@
 		
 		
     <Grid RowDefinitions="100,*">
-		<Grid Grid.Row="0" ColumnDefinitions="*,*,*,*,*,*,*,*">
+		<Grid Grid.Row="0" ColumnDefinitions="*,*,*,*,*,*,*,*,*">
 			<Button Content="Menu" Grid.Column="0" />
 			<Button Content="AND" Grid.Column="1" Command="{Binding SetAnd}" />
 			<Button Content="OR" Grid.Column="2" Command="{Binding SetOr}"/>
 			<Button Content="NOT" Grid.Column="3" Command="{Binding SetNt}"/>
 			<Button Content="NOR" Grid.Column="4" Command="{Binding SetXor}"/>
 			<Button Content="VSourse" Grid.Column="5" Command="{Binding VSourse}"/>
-			<Button Content="OutPut" Grid.Column="6" Command="{Binding OutPut}"/>
-			<Button Content="Del" Grid.Column="7" Command="{Binding DelLink}"/>
+			<Button Content="Multipls" Grid.Column="6" Command="{Binding MultiP}"/>
+			<Button Content="Lamp" Grid.Column="7" Command="{Binding OutPut}"/>
+			<Button Content="Del" Grid.Column="8" Command="{Binding DelLink}"/>
 		</Grid>
 		<Grid Grid.Row="1" ColumnDefinitions="*,100">
 			<ItemsControl Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Items="{Binding COLL}" PointerPressed="PressedOnCanv">
@@ -173,6 +174,56 @@
 										<TranslateTransform
 											X="{Binding SStartPoint.X}"
 											Y="{Binding SStartPoint.Y}"/>
+									</TransformGroup>
+								</Rectangle.RenderTransform>
+							</Rectangle>
+							<Rectangle Height="10" Width="10" Stroke="Black" Fill="Black">
+								<Rectangle.RenderTransform>
+									<TransformGroup>
+										<TranslateTransform
+											X="{Binding OStartPoint.X}"
+											Y="{Binding OStartPoint.Y}"/>
+									</TransformGroup>
+								</Rectangle.RenderTransform>
+							</Rectangle>
+						</Canvas>
+					</DataTemplate>
+
+					<DataTemplate DataType="{x:Type model:Multipleks}">
+						<Canvas>
+							<Image Source="C:\Users\Rik\source\repos\KursWork\KursWork\Assets\2023-05-27_22-44-12.png">
+								<Image.RenderTransform>
+									<TransformGroup>
+										<TranslateTransform
+											X="{Binding StartPoint.X}"
+											Y="{Binding StartPoint.Y}"/>
+									</TransformGroup>
+								</Image.RenderTransform>
+							</Image>
+							<Rectangle Height="10" Width="10" Stroke="Black" Fill="Black">
+								<Rectangle.RenderTransform>
+									<TransformGroup>
+										<TranslateTransform
+											X="{Binding FStartPoint.X}"
+											Y="{Binding FStartPoint.Y}"/>
+									</TransformGroup>
+								</Rectangle.RenderTransform>
+							</Rectangle>
+							<Rectangle Height="10" Width="10" Stroke="Black" Fill="Black">
+								<Rectangle.RenderTransform>
+									<TransformGroup>
+										<TranslateTransform
+											X="{Binding SStartPoint.X}"
+											Y="{Binding SStartPoint.Y}"/>
+									</TransformGroup>
+								</Rectangle.RenderTransform>
+							</Rectangle>
+							<Rectangle Height="10" Width="10" Stroke="Black" Fill="Black">
+								<Rectangle.RenderTransform>
+									<TransformGroup>
+										<TranslateTransform
+											X="{Binding SidePoint.X}"
+											Y="{Binding SidePoint.Y}"/>
 									</TransformGroup>
 								</Rectangle.RenderTransform>
 							</Rectangle>

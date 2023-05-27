@@ -13,7 +13,7 @@ namespace KursWork.Views
     {
         private Point point5 = new Point(5, 5);
         private int globalFlag;
-        private int Num = 0;
+        
         private DModel startDMod = new DModel();
         private Link link = new Link();
         private Point DefPoint = new Point();
@@ -38,7 +38,7 @@ namespace KursWork.Views
                         AndM am = new AndM();
                         Point point = currentPointPos;
                         am.StartPoint = point;
-                        am.Numb = Num;
+                        am.Numb = mw.Num;
                         mw.COLL.Add(am);
                     }
                     if (mw.SelScheme == 1)
@@ -46,14 +46,14 @@ namespace KursWork.Views
                         OrM om = new OrM();
                         Point point = currentPointPos;
                         om.StartPoint = point;
-                        om.Numb = Num;
+                        om.Numb = mw.Num;
                         mw.COLL.Add(om);
                     }
                     if (mw.SelScheme == 2)
                     {
                         NoT nt = new NoT();
                         Point point = currentPointPos;
-                        nt.Numb = Num;
+                        nt.Numb = mw.Num;
                         nt.StartPoint = point;
                         mw.COLL.Add(nt);
                     }
@@ -61,7 +61,7 @@ namespace KursWork.Views
                     {
                         XoR xr = new XoR();
                         Point point = currentPointPos;
-                        xr.Numb = Num;
+                        xr.Numb = mw.Num;
                         xr.StartPoint = point;
                         mw.COLL.Add(xr);
                     }
@@ -69,7 +69,15 @@ namespace KursWork.Views
                     {
                         VSourse xr = new VSourse();
                         Point point = currentPointPos;
-                        xr.Numb = Num;
+                        xr.Numb = mw.Num;
+                        xr.StartPoint = point;
+                        mw.COLL.Add(xr);
+                    }
+                    if (mw.SelScheme == 6)
+                    {
+                        Multipleks xr = new Multipleks();
+                        Point point = currentPointPos;
+                        xr.Numb = mw.Num;
                         xr.StartPoint = point;
                         mw.COLL.Add(xr);
                     }
@@ -78,16 +86,17 @@ namespace KursWork.Views
                         Lamp xr = new Lamp();
                         xr.VisibleQ = false;
                         Point point = currentPointPos;
-                        xr.Numb = Num;
+                        xr.Numb = mw.Num;
                         xr.StartPoint = point;
                         mw.COLL.Add(xr);
                     }
-                    Num++;
+                    mw.Num++;
                 }
                 if (args.Source is Image img)
                 {
                     if (img.DataContext is DModel dmod)
                     {
+                        mw.DModelForDelete = dmod;
                         this.PointerMoved += MoveStruct;
                         this.PointerReleased += FreeStruct;
                     }
@@ -142,6 +151,10 @@ namespace KursWork.Views
                                     {
                                         link.FPoint = dmod.OStartPoint + point5;
                                     }
+                                    if (link.SInpNumb == 3 && dmod is Multipleks mx)
+                                    {
+                                        link.FPoint = mx.SidePoint + point5;
+                                    }
                                 }
                                 if (dmod.Numb == link.ELinkNumb)
                                 {
@@ -156,6 +169,10 @@ namespace KursWork.Views
                                     if (link.EInpNumb == 2)
                                     {
                                         link.SPoint = dmod.OStartPoint + point5;
+                                    }
+                                    if (link.EInpNumb == 3 && dmod is Multipleks mx)
+                                    {
+                                        link.SPoint = mx.SidePoint + point5;
                                     }
                                 }
                             }
@@ -203,6 +220,13 @@ namespace KursWork.Views
                                 {
                                     flag = 2;
                                 }
+                                if(dModel is Multipleks multipleks)
+                                {
+                                    if(multipleks.SidePoint+ tempP == DefPoint)
+                                    {
+                                        flag = 3;
+                                    }
+                                }
                             }
                         }
                         if (flag == 0) { 
@@ -234,6 +258,19 @@ namespace KursWork.Views
                                 SInpNumb = 2,
                             };
                         }
+                        if (flag == 3)
+                        {
+                            if (dModel is Multipleks mpx)
+                            {
+                                link = new Link
+                                {
+                                    FPoint = mpx.SidePoint + new Point(5, 5),
+                                    SPoint = currentPointPos,
+                                    SLinkNumb = dModel.Numb,
+                                    SInpNumb = 3,
+                                };
+                            }
+                        }
                         globalFlag = flag;
                         startDMod = dModel;
                         mw.COLL.Add(link);
@@ -262,7 +299,7 @@ namespace KursWork.Views
                             for (int j = 0; j < 10; j++)
                             {
                                 Point point = new Point(q, j);
-                                if (dModel.FStartPoint + point == currentPointPos && ((globalFlag == 0 && startDMod.FInpC != true) || (globalFlag == 1 && startDMod.SInpC != true) || (globalFlag == 2 && startDMod.OInpC != true)) && dModel.FInpC!=true) 
+                                if (dModel.FStartPoint + point == currentPointPos && ((globalFlag == 0 && startDMod.FInpC != true) || (globalFlag == 1 && startDMod.SInpC != true) || (globalFlag == 2 && startDMod.OInpC != true) || (globalFlag == 3 && startDMod is Multipleks mx1 && mx1.SideC != true)) && dModel.FInpC!=true) 
                                 {
                                     dModel.FInpC = true;
                                     link.ELinkNumb = dModel.Numb;
@@ -272,8 +309,9 @@ namespace KursWork.Views
                                     if (globalFlag == 0) startDMod.FInpC = true;
                                     if (globalFlag == 1) startDMod.SInpC = true;
                                     if (globalFlag == 2) startDMod.OInpC = true;
+                                    if (globalFlag == 3 && startDMod is Multipleks mpX) mpX.SideC = true;
                                 }
-                                if (dModel.SStartPoint + point == currentPointPos && ((globalFlag == 0 && startDMod.FInpC != true) || (globalFlag == 1 && startDMod.SInpC != true) || (globalFlag == 2 && startDMod.OInpC != true)) && dModel.SInpC!=true)
+                                if (dModel.SStartPoint + point == currentPointPos && ((globalFlag == 0 && startDMod.FInpC != true) || (globalFlag == 1 && startDMod.SInpC != true) || (globalFlag == 2 && startDMod.OInpC != true) || (globalFlag == 3 && startDMod is Multipleks mx2 && mx2.SideC != true)) && dModel.SInpC!=true)
                                 {
                                     dModel.SInpC = true;
                                     link.ELinkNumb = dModel.Numb;
@@ -283,8 +321,9 @@ namespace KursWork.Views
                                     if (globalFlag == 0) startDMod.FInpC = true;
                                     if (globalFlag == 1) startDMod.SInpC = true;
                                     if (globalFlag == 2) startDMod.OInpC = true;
+                                    if (globalFlag == 3 && startDMod is Multipleks mpX) mpX.SideC = true;
                                 }
-                                if (dModel.OStartPoint + point == currentPointPos && ((globalFlag == 0 && startDMod.FInpC != true) || (globalFlag == 1 && startDMod.SInpC != true) || (globalFlag == 2 && startDMod.OInpC != true)) && dModel.OInpC!=true)
+                                if (dModel.OStartPoint + point == currentPointPos && ((globalFlag == 0 && startDMod.FInpC != true) || (globalFlag == 1 && startDMod.SInpC != true) || (globalFlag == 2 && startDMod.OInpC != true) || (globalFlag == 3 && startDMod is Multipleks mx3 && mx3.SideC != true)) && dModel.OInpC!=true)
                                 {
                                     dModel.OInpC = true;
                                     link.ELinkNumb = dModel.Numb;
@@ -294,28 +333,29 @@ namespace KursWork.Views
                                     if (globalFlag == 0) startDMod.FInpC = true;
                                     if (globalFlag == 1) startDMod.SInpC = true;
                                     if (globalFlag == 2) startDMod.OInpC = true;
+                                    if (globalFlag == 3 && startDMod is Multipleks mpX) mpX.SideC = true;
+                                }
+                                if (dModel is Multipleks mpx && mpx.SidePoint + point == currentPointPos && ((globalFlag == 0 && startDMod.FInpC != true) || (globalFlag == 1 && startDMod.SInpC != true) || (globalFlag == 2 && startDMod.OInpC != true) || (globalFlag == 3 && startDMod is Multipleks mx4 && mx4.SideC != true)) && mpx.SideC != true)
+                                {
+                                    mpx.SideC = true;
+                                    link.ELinkNumb = dModel.Numb;
+                                    mw.COLL.Add(link);
+                                    flag = true;
+                                    link.EInpNumb = 3;
+                                    if (globalFlag == 0) startDMod.FInpC = true;
+                                    if (globalFlag == 1) startDMod.SInpC = true;
+                                    if (globalFlag == 2) startDMod.OInpC = true;
+                                    if (globalFlag == 3 && startDMod is Multipleks mpX) mpX.SideC = true;
                                 }
                             }
-                        }
-                        if (flag == true)
-                        {
-                            if (startDMod.BOut == true && link.EInpNumb == 0) dModel.FInp = true;
-                            if (startDMod.BOut == true && link.EInpNumb == 1) dModel.SInp = true;
-                            if (startDMod.BOut == false && link.EInpNumb == 0) dModel.FInp = false;
-                            if (startDMod.BOut == false && link.EInpNumb == 1) dModel.SInp = false;
-                            dModel.BOut = dModel.Logic();
-                        }
-                        if(dModel is Lamp lamp)
-                        {
-                            if (lamp.FInp == true && lamp.FInpC == true) lamp.VisibleQ = true;
-                            else lamp.VisibleQ = false;
                         }
                     }
                 }
                 if (flag == false) mw.COLL.Remove(link);
-                
+                if (flag == true) mw.Num++;
             }
                 this.PointerReleased -= StopLink;
+                if(DataContext is MainWindowViewModel mw1) mw1.ResetCOLL();
         }
     }
 }

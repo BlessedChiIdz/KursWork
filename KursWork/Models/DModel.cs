@@ -63,7 +63,7 @@ namespace KursWork.Models
             get => _numb;
             set => SetProperty(ref _numb,value);
         }
-        public Point StartPoint
+        public virtual Point StartPoint
         {
             get => startPoint;
             set 
