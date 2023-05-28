@@ -10,23 +10,16 @@
 		Width="500"
 		>
 
-		<Grid ColumnDefinitions="150,*">
-			<Grid Grid.Column="0" RowDefinitions="*,*,*">
-				<Button Grid.Row="0" Content="Create"/>
-				<Button Grid.Row="1" Content="Open"/>
-				<Button Grid.Row="2" Content="Exit"/>
-			</Grid>
-			<Grid Grid.Column="1" >
-				<ListBox Width="350" Items="{Binding $parent[Window].DataContext.Projects}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+		
+				<ListBox Width="500" Items="{Binding $parent[Window].DataContext.Projects}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectedIndex="{Binding $parent[Window].DataContext.SelIndex}">
 					<ListBox.ItemTemplate>
 						<DataTemplate>
 							<Border CornerRadius="4">
-								<TextBlock Text="{Binding Path}" TextWrapping="Wrap"/>
+								<TextBlock Text="{Binding PATH}" TextWrapping="Wrap" PointerPressed="Press"/>
 							</Border>
 						</DataTemplate>
 					</ListBox.ItemTemplate>
 				</ListBox>
-			</Grid>
-		</Grid>
+			
   
 </Window>

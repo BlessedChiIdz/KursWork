@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using KursWork.Models;
 using KursWork.ViewModels;
@@ -12,6 +13,15 @@ namespace KursWork.Views
         {
             InitializeComponent();
         }
-        
+        void Press(object sender, PointerPressedEventArgs args)
+        {
+            if(DataContext is MainWindowViewModel mw)
+            {
+                if (args.ClickCount == 2)
+                {
+                    mw.Read(mw.Projects[mw.SelIndex].PATH);
+                }
+            }
+        }
     }
 }

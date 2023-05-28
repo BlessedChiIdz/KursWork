@@ -29,11 +29,13 @@ namespace KursWork.Views
         public MainWindow()
         {
             DataContext = new MainWindowViewModel(this);
-            InitializeComponent(); 
+            InitializeComponent();
             FillProjList();
-            StartWind = new StartWind();
-            StartWind.Topmost = true;
-            StartWind.Show();
+            StartWind SW= new StartWind();
+            SW.Topmost = true;
+            SW.DataContext = DataContext;
+            SW.Show();
+            ReadListOfProj();
         }
         private void FillProjList()
         {
@@ -48,6 +50,36 @@ namespace KursWork.Views
                     command.Connection = connection;
                     command.CommandText = "CREATE TABLE IF NOT EXISTS Catalog (id INTEGER PRIMARY KEY AUTOINCREMENT, Path TEXT, Pos INTEGER)";
                     command.ExecuteNonQuery();
+                }
+            }
+        }
+        private void ReadListOfProj()
+        {
+            if (DataContext is MainWindowViewModel mw)
+            {
+                string path = Directory.GetCurrentDirectory() + $"\\ProjList.db";
+                string sqlExpression = "SELECT * FROM Catalog";
+                using (var connection = new SqliteConnection("Data Source = " + path))
+                {
+                    connection.Open();
+
+                    SqliteCommand command = new SqliteCommand(sqlExpression, connection);
+                    using (SqliteDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows) // если есть данные
+                        {
+                            while (reader.Read())   // построчно считываем данные
+                            {
+                                var id = reader.GetValue(0);
+                                var name = reader.GetValue(1);
+
+                                mw.Projects.Add(new ProjM
+                                {
+                                    PATH = (string)name,
+                                });
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -70,7 +102,7 @@ namespace KursWork.Views
 
                     mw.Projects.Add(new ProjM
                     {
-                        Path = path[0],
+                        PATH = path[0],
                     }) ;
                 }
             }

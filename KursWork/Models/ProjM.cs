@@ -12,7 +12,7 @@ namespace KursWork.Models
         private string _path;
         private string _name;
 
-        public string Path
+        public string PATH
         {
             get => _path;
             set => SetProperty(ref _path, value);

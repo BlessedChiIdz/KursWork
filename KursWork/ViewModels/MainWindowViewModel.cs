@@ -24,8 +24,15 @@ namespace KursWork.ViewModels
         private bool Pflag = false; 
         private int selScheme = 0;
         private string _projName;
-        private ObservableCollection<ProjM> _projects;
+        private int _selIndex;
+        private ObservableCollection<ProjM> _projects = new ObservableCollection<ProjM>();
         private DModel dModelForDelete;
+
+        public int SelIndex
+        {
+            get => _selIndex;
+            set => SetProperty(ref _selIndex, value);
+        }
 
         public ObservableCollection<ProjM> Projects
         {
