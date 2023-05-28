@@ -2,9 +2,13 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.VisualTree;
+using DynamicData;
 using KursWork.Models;
 using KursWork.ViewModels;
+using Microsoft.Data.Sqlite;
+using System.IO;
 using System.Linq;
 using System.Threading;
 
@@ -22,12 +26,52 @@ namespace KursWork.Views
 
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent(); 
+            FillProjList();
             StartWind = new StartWind();
             StartWind.Topmost = true;
             StartWind.Show();
             DataContext = new MainWindowViewModel(this);
         }
+        private void FillProjList()
+        {
+            string path = Directory.GetCurrentDirectory() + $"\\ProjList.db";
+            
+                using (var connection = new SqliteConnection("Data Source = " + path))
+                {
+                    connection.Open();
+                    SqliteCommand command = new SqliteCommand();
+                    command.Connection = connection;
+                    command.CommandText = "CREATE TABLE IF NOT EXISTS Catalog (id INTEGER PRIMARY KEY AUTOINCREMENT, Path TEXT, Pos INTEGER)";
+                    command.ExecuteNonQuery();
+                }
+
+        }
+        private async void OnOpenMenu(object sender, RoutedEventArgs eventArgs)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            openFileDialog.Filters.Add(
+                new FileDialogFilter
+                {
+                    Name = "SQL files",
+                    Extensions = new string[] { "db" }.ToList()
+                });
+            string[]? path = await openFileDialog.ShowAsync(this);
+            if (path != null)
+            {
+                if(DataContext is MainWindowViewModel mw)
+                {
+                    mw.Read(path[0]);
+
+                    mw.Projects.Add(new ProjM
+                    {
+                        Path = path[0],
+                    }) ;
+                }
+            }
+        }
+
         void PressedOnCanv(object sender, PointerPressedEventArgs args)
         {
             Point currentPointPos = args
@@ -44,7 +88,7 @@ namespace KursWork.Views
                         AndM am = new AndM();
                         Point point = currentPointPos;
                         am.StartPoint = point;
-                        am.Numb = mw.Num;
+                        am.Numb = mw.NumM;
                         mw.COLL.Add(am);
                     }
                     if (mw.SelScheme == 1)
@@ -52,14 +96,14 @@ namespace KursWork.Views
                         OrM om = new OrM();
                         Point point = currentPointPos;
                         om.StartPoint = point;
-                        om.Numb = mw.Num;
+                        om.Numb = mw.NumM;
                         mw.COLL.Add(om);
                     }
                     if (mw.SelScheme == 2)
                     {
                         NoT nt = new NoT();
                         Point point = currentPointPos;
-                        nt.Numb = mw.Num;
+                        nt.Numb = mw.NumM;
                         nt.StartPoint = point;
                         mw.COLL.Add(nt);
                     }
@@ -67,7 +111,7 @@ namespace KursWork.Views
                     {
                         XoR xr = new XoR();
                         Point point = currentPointPos;
-                        xr.Numb = mw.Num;
+                        xr.Numb = mw.NumM;
                         xr.StartPoint = point;
                         mw.COLL.Add(xr);
                     }
@@ -75,7 +119,7 @@ namespace KursWork.Views
                     {
                         VSourse xr = new VSourse();
                         Point point = currentPointPos;
-                        xr.Numb = mw.Num;
+                        xr.Numb = mw.NumM;
                         xr.StartPoint = point;
                         mw.COLL.Add(xr);
                     }
@@ -83,7 +127,7 @@ namespace KursWork.Views
                     {
                         Multipleks xr = new Multipleks();
                         Point point = currentPointPos;
-                        xr.Numb = mw.Num;
+                        xr.Numb = mw.NumM;
                         xr.StartPoint = point;
                         mw.COLL.Add(xr);
                     }
@@ -92,11 +136,11 @@ namespace KursWork.Views
                         Lamp xr = new Lamp();
                         xr.VisibleQ = false;
                         Point point = currentPointPos;
-                        xr.Numb = mw.Num;
+                        xr.Numb = mw.NumM;
                         xr.StartPoint = point;
                         mw.COLL.Add(xr);
                     }
-                    mw.Num++;
+                    mw.NumM++;
                 }
                 if (args.Source is Image img)
                 {
@@ -312,7 +356,7 @@ namespace KursWork.Views
                                     mw.COLL.Add(link);
                                     flag = true;
                                     link.EInpNumb = 0;
-                                    link.Numb = mw.Num;
+                                    link.Numb = mw.NumM;
                                     if (globalFlag == 0) startDMod.FInpC = true;
                                     if (globalFlag == 1) startDMod.SInpC = true;
                                     if (globalFlag == 2) startDMod.OInpC = true;
@@ -325,7 +369,7 @@ namespace KursWork.Views
                                     mw.COLL.Add(link);
                                     flag = true;
                                     link.EInpNumb = 1;
-                                    link.Numb = mw.Num;
+                                    link.Numb = mw.NumM;
                                     if (globalFlag == 0) startDMod.FInpC = true;
                                     if (globalFlag == 1) startDMod.SInpC = true;
                                     if (globalFlag == 2) startDMod.OInpC = true;
@@ -338,7 +382,7 @@ namespace KursWork.Views
                                     mw.COLL.Add(link);
                                     flag = true;
                                     link.EInpNumb = 2;
-                                    link.Numb = mw.Num;
+                                    link.Numb = mw.NumM;
                                     if (globalFlag == 0) startDMod.FInpC = true;
                                     if (globalFlag == 1) startDMod.SInpC = true;
                                     if (globalFlag == 2) startDMod.OInpC = true;
@@ -350,7 +394,7 @@ namespace KursWork.Views
                                     link.ELinkNumb = dModel.Numb;
                                     mw.COLL.Add(link);
                                     flag = true;
-                                    link.Numb = mw.Num;
+                                    link.Numb = mw.NumM;
                                     link.EInpNumb = 3;
                                     if (globalFlag == 0) startDMod.FInpC = true;
                                     if (globalFlag == 1) startDMod.SInpC = true;
@@ -362,7 +406,7 @@ namespace KursWork.Views
                     }
                 }
                 if (flag == false) mw.COLL.Remove(link);
-                if (flag == true) { mw.Num++;}
+                if (flag == true) { mw.NumM++;}
             }
                 this.PointerReleased -= StopLink;
                 if(DataContext is MainWindowViewModel mw1) mw1.ResetCOLL();

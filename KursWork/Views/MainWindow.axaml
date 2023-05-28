@@ -16,9 +16,10 @@
 			<Button Content="Menu">
 				<Button.Flyout>
 					<Flyout>
-						<Grid ColumnDefinitions="*,*">
+						<Grid ColumnDefinitions="*,*,*">
 							<Button Grid.Column="0" Content="Save" Command="{Binding Save}"/>
 							<Button Grid.Column="1" Content="Open" Command="{Binding Read}"/>
+							<Button Grid.Column="2" Content="OpenFiles" Click="OnOpenMenu"/>
 						</Grid>
 					</Flyout>
 				</Button.Flyout>
