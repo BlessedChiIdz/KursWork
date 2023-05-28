@@ -95,8 +95,33 @@ namespace KursWork.ViewModels
             selScheme = 5;
         }
 
-        
+        public void AddToPRL(string DbPath)
+        {
+            string path = Directory.GetCurrentDirectory() + $"\\ProjList.db";
 
+            using (var connection = new SqliteConnection("Data Source = " + path))
+            {
+                connection.Open();
+                SqliteCommand command = new SqliteCommand();
+                command.Connection = connection;
+                command.CommandText = "CREATE TABLE IF NOT EXISTS Catalog (id INTEGER PRIMARY KEY AUTOINCREMENT, Path TEXT, Pos INTEGER)";
+                command.ExecuteNonQuery();
+                command.CommandText = $"INSERT INTO Catalog (Path) VALUES ('{DbPath}')";
+                command.ExecuteNonQuery();
+                command.CommandText = "DELETE FROM Catalog WHERE EXISTS (SELECT 1 FROM Catalog p2   WHERE Catalog.Path = p2.Path AND Catalog.rowid > p2.rowid)";
+                command.ExecuteNonQuery();
+            }
+
+        }
+
+        public void Reset()
+        {
+            COLL.Clear();
+            NumM = 0;
+            ProjName = null;
+            DModelForDelete = null;
+            SelLink = null;
+        }
         public void ResetCOLL()
         {
             bool flag = false;
@@ -354,7 +379,6 @@ namespace KursWork.ViewModels
 
         public void Save()
         {
-
             Delete();
             string path = Directory.GetCurrentDirectory() + $"\\{ProjName}.db";
             
@@ -413,8 +437,10 @@ namespace KursWork.ViewModels
                     }
                     connection.Close();
                     command.Connection = connection;
+                    AddToPRL(path);
                 }
             
+
 
         }
         public void Read()

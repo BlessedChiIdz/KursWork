@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:vm="using:KursWork.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="KursWork.Views.StartWind"
         Title="StartWind"
@@ -16,11 +17,11 @@
 				<Button Grid.Row="2" Content="Exit"/>
 			</Grid>
 			<Grid Grid.Column="1" >
-				<ListBox Width="350" Items="{Binding Projects}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+				<ListBox Width="350" Items="{Binding $parent[Window].DataContext.Projects}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 					<ListBox.ItemTemplate>
 						<DataTemplate>
 							<Border CornerRadius="4">
-								<TextBlock Text="{Binding Name}" TextWrapping="Wrap"/>
+								<TextBlock Text="{Binding Path}" TextWrapping="Wrap"/>
 							</Border>
 						</DataTemplate>
 					</ListBox.ItemTemplate>

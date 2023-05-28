@@ -9,10 +9,11 @@ namespace KursWork.Models
 {
     public class DFigure : ObservableObject
     {
-        private bool _test;
-        public bool Test
+        private bool _flag = false;
+        public bool Flag
         {
-            get => _test;
+            get => _flag;
+            set => SetProperty(ref _flag, value);
         }
     }
 }

@@ -1,4 +1,8 @@
 using Avalonia.Controls;
+using Avalonia.Interactivity;
+using KursWork.Models;
+using KursWork.ViewModels;
+using System.Collections.ObjectModel;
 
 namespace KursWork.Views
 {
@@ -8,5 +12,6 @@ namespace KursWork.Views
         {
             InitializeComponent();
         }
+        
     }
 }

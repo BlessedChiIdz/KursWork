@@ -8,6 +8,8 @@ using DynamicData;
 using KursWork.Models;
 using KursWork.ViewModels;
 using Microsoft.Data.Sqlite;
+using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -18,7 +20,7 @@ namespace KursWork.Views
     {
         private Point point5 = new Point(5, 5);
         private int globalFlag;
-        
+        Link lastLink = new Link();
         private DModel startDMod = new DModel();
         private Link link = new Link();
         private Point DefPoint = new Point();
@@ -26,17 +28,19 @@ namespace KursWork.Views
 
         public MainWindow()
         {
+            DataContext = new MainWindowViewModel(this);
             InitializeComponent(); 
             FillProjList();
             StartWind = new StartWind();
             StartWind.Topmost = true;
             StartWind.Show();
-            DataContext = new MainWindowViewModel(this);
         }
         private void FillProjList()
         {
-            string path = Directory.GetCurrentDirectory() + $"\\ProjList.db";
-            
+            if (DataContext is MainWindowViewModel mw)
+            {
+                string path = Directory.GetCurrentDirectory() + $"\\ProjList.db";
+
                 using (var connection = new SqliteConnection("Data Source = " + path))
                 {
                     connection.Open();
@@ -45,7 +49,7 @@ namespace KursWork.Views
                     command.CommandText = "CREATE TABLE IF NOT EXISTS Catalog (id INTEGER PRIMARY KEY AUTOINCREMENT, Path TEXT, Pos INTEGER)";
                     command.ExecuteNonQuery();
                 }
-
+            }
         }
         private async void OnOpenMenu(object sender, RoutedEventArgs eventArgs)
         {
@@ -252,8 +256,8 @@ namespace KursWork.Views
                     {
                         
                         int flag = 100;
-                        if (link != null) mw.COLL.Remove(link);
-                        for (int i = 0; i < 10; i++) 
+                        if (link != null && link.Flag == false) mw.COLL.Remove(link);
+                        for (int i = 0; i < 10; i++)
                         {
                             for(int j = 0; j < 10; j++)
                             {
@@ -326,11 +330,13 @@ namespace KursWork.Views
                         mw.COLL.Add(link);
                     }
                 }
+                
             }
         }
         void StopLink(object sender, PointerReleasedEventArgs args) 
         {
             this.PointerMoved -= NewLink;
+            lastLink = link;
             bool flag = false;
             if (DataContext is MainWindowViewModel mw)
             {
@@ -356,6 +362,7 @@ namespace KursWork.Views
                                     mw.COLL.Add(link);
                                     flag = true;
                                     link.EInpNumb = 0;
+                                    link.Flag = true;
                                     link.Numb = mw.NumM;
                                     if (globalFlag == 0) startDMod.FInpC = true;
                                     if (globalFlag == 1) startDMod.SInpC = true;
@@ -368,6 +375,7 @@ namespace KursWork.Views
                                     link.ELinkNumb = dModel.Numb;
                                     mw.COLL.Add(link);
                                     flag = true;
+                                    link.Flag = true;
                                     link.EInpNumb = 1;
                                     link.Numb = mw.NumM;
                                     if (globalFlag == 0) startDMod.FInpC = true;
@@ -381,6 +389,7 @@ namespace KursWork.Views
                                     link.ELinkNumb = dModel.Numb;
                                     mw.COLL.Add(link);
                                     flag = true;
+                                    link.Flag = true;
                                     link.EInpNumb = 2;
                                     link.Numb = mw.NumM;
                                     if (globalFlag == 0) startDMod.FInpC = true;
@@ -392,6 +401,7 @@ namespace KursWork.Views
                                 {
                                     mpx.SideC = true;
                                     link.ELinkNumb = dModel.Numb;
+                                    link.Flag = true;
                                     mw.COLL.Add(link);
                                     flag = true;
                                     link.Numb = mw.NumM;
@@ -406,7 +416,7 @@ namespace KursWork.Views
                     }
                 }
                 if (flag == false) mw.COLL.Remove(link);
-                if (flag == true) { mw.NumM++;}
+                if (flag == true) { mw.NumM++; mw.COLL.Remove(lastLink); }
             }
                 this.PointerReleased -= StopLink;
                 if(DataContext is MainWindowViewModel mw1) mw1.ResetCOLL();
