@@ -16,5 +16,9 @@ namespace KursWork.Models
             get => _vision;
             set => SetProperty(ref _vision, value);
         }
+        public override string Name
+        {
+            get => "Lamp";
+        }
     }
 }

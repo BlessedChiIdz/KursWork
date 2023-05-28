@@ -15,9 +15,10 @@ namespace KursWork.Models
             if (FInp == true) return false;
             else return true;
         }
-        public string Name
+        public override string Name
         {
             get => "Not";
+            
         }
     }
 }

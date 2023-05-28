@@ -17,6 +17,12 @@ namespace KursWork.Models
         private Point _sinpP;
         private Point _outP;
         private int _numb;
+        private string _name;
+        public virtual string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value);
+        }
         public Point SStartPoint
         {
             get => _sinpP;

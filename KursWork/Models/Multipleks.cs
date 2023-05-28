@@ -52,6 +52,9 @@ namespace KursWork.Models
             if (Side == false) return FInp;
             else return SInp;
         }
-
+        public override string Name
+        {
+            get => "Multipleks";
+        }
     }
 }

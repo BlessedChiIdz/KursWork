@@ -17,7 +17,7 @@ namespace KursWork.Models
         {
             return FInp | SInp;
         }
-        public string Name
+        public override string Name
         {
             get => "Or";
         }

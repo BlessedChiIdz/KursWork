@@ -17,5 +17,9 @@ namespace KursWork.Models
         {
             get => voltage;
         }
+        public override string Name
+        {
+            get => "VS";
+        }
     }
 }

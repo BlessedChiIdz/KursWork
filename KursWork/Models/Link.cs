@@ -12,7 +12,8 @@ namespace KursWork.Models
         private int _sinpNumb;
         private int _einpNumb;
         private int _num;
-        public int NUM
+        private string _name;
+        public int Numb
         {
             get => _num;
             set => SetProperty(ref _num, value);
@@ -50,6 +51,11 @@ namespace KursWork.Models
         {
             get => _einpNumb;
             set => SetProperty(ref _einpNumb, value);
+        }
+        public string Name
+        {
+            get => "Link";
+            set => SetProperty(ref _name, value);
         }
     }
 }

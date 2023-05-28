@@ -6,6 +6,7 @@ using Avalonia.VisualTree;
 using KursWork.Models;
 using KursWork.ViewModels;
 using System.Linq;
+using System.Threading;
 
 namespace KursWork.Views
 {
@@ -17,9 +18,14 @@ namespace KursWork.Views
         private DModel startDMod = new DModel();
         private Link link = new Link();
         private Point DefPoint = new Point();
+        private StartWind StartWind;
+
         public MainWindow()
         {
             InitializeComponent();
+            StartWind = new StartWind();
+            StartWind.Topmost = true;
+            StartWind.Show();
             DataContext = new MainWindowViewModel(this);
         }
         void PressedOnCanv(object sender, PointerPressedEventArgs args)
@@ -306,7 +312,7 @@ namespace KursWork.Views
                                     mw.COLL.Add(link);
                                     flag = true;
                                     link.EInpNumb = 0;
-                                    link.NUM = mw.Num;
+                                    link.Numb = mw.Num;
                                     if (globalFlag == 0) startDMod.FInpC = true;
                                     if (globalFlag == 1) startDMod.SInpC = true;
                                     if (globalFlag == 2) startDMod.OInpC = true;
@@ -319,7 +325,7 @@ namespace KursWork.Views
                                     mw.COLL.Add(link);
                                     flag = true;
                                     link.EInpNumb = 1;
-                                    link.NUM = mw.Num;
+                                    link.Numb = mw.Num;
                                     if (globalFlag == 0) startDMod.FInpC = true;
                                     if (globalFlag == 1) startDMod.SInpC = true;
                                     if (globalFlag == 2) startDMod.OInpC = true;
@@ -332,7 +338,7 @@ namespace KursWork.Views
                                     mw.COLL.Add(link);
                                     flag = true;
                                     link.EInpNumb = 2;
-                                    link.NUM = mw.Num;
+                                    link.Numb = mw.Num;
                                     if (globalFlag == 0) startDMod.FInpC = true;
                                     if (globalFlag == 1) startDMod.SInpC = true;
                                     if (globalFlag == 2) startDMod.OInpC = true;
@@ -344,7 +350,7 @@ namespace KursWork.Views
                                     link.ELinkNumb = dModel.Numb;
                                     mw.COLL.Add(link);
                                     flag = true;
-                                    link.NUM = mw.Num;
+                                    link.Numb = mw.Num;
                                     link.EInpNumb = 3;
                                     if (globalFlag == 0) startDMod.FInpC = true;
                                     if (globalFlag == 1) startDMod.SInpC = true;

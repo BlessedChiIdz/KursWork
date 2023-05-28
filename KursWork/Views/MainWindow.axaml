@@ -13,7 +13,16 @@
 		
     <Grid RowDefinitions="100,*">
 		<Grid Grid.Row="0" ColumnDefinitions="*,*,*,*,*,*,*,*,*,*">
-			<Button Content="Menu" Grid.Column="0" />
+			<Button Content="Menu">
+				<Button.Flyout>
+					<Flyout>
+						<Grid ColumnDefinitions="*,*">
+							<Button Grid.Column="0" Content="Save" Command="{Binding Save}"/>
+							<Button Grid.Column="1" Content="Open" Command="{Binding Read}"/>
+						</Grid>
+					</Flyout>
+				</Button.Flyout>
+			</Button>
 			<Button Content="AND" Grid.Column="1" Command="{Binding SetAnd}" />
 			<Button Content="OR" Grid.Column="2" Command="{Binding SetOr}"/>
 			<Button Content="NOT" Grid.Column="3" Command="{Binding SetNt}"/>
@@ -308,15 +317,18 @@
 
 				</ItemsControl.DataTemplates>
 			</ItemsControl>
-			<ListBox Grid.Column="1" Items="{Binding COLL}" Width="150" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-				<ListBox.ItemTemplate>
-					<DataTemplate>
-						<Border CornerRadius="4">
-							<TextBlock Text="{Binding Name}" TextWrapping="Wrap"/>
-						</Border>
-					</DataTemplate>
-				</ListBox.ItemTemplate>
-			</ListBox>
+			<Grid Grid.Column="1" RowDefinitions="50,*">
+				<TextBox Text="{Binding ProjName}" Width="100" Margin="0,0,50,0"/>
+				<ListBox Grid.Row="1" Items="{Binding COLL}" Width="150" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border CornerRadius="4">
+								<TextBlock Text="{Binding Name}" TextWrapping="Wrap"/>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
 		</Grid>
 	</Grid>
 
