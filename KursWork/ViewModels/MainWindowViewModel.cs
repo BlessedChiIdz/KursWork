@@ -477,7 +477,8 @@ namespace KursWork.ViewModels
             {
                 COLL.Clear();
             }
-            string sqlExpression = "SELECT * FROM Catalog";
+            string sqlExpression = "SELECT * FROM Catalog ORDER BY Numb;";
+            
             string path = Directory.GetCurrentDirectory() + $"\\{ProjName}.db";
             if (File.Exists(path)) {
                 using (var connection = new SqliteConnection("Data Source = " + path))
@@ -755,7 +756,7 @@ namespace KursWork.ViewModels
                     command.Connection.Close();
                     connection.Close();
                 }
-                NumM = COLL.Count();
+                NumM = COLL.Count()+1;
             }
         }
 
@@ -1065,7 +1066,7 @@ namespace KursWork.ViewModels
                     connection.Close();
                 }
             }
-            NumM = COLL.Count();
+            NumM = COLL.Count()+1;
         }
         
     }
