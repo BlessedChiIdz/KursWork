@@ -8,8 +8,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
+using Tmds.DBus;
 
 namespace KursWork.ViewModels
 {
@@ -274,9 +276,13 @@ namespace KursWork.ViewModels
         }
         void DelDmod()
         {
-            if (DModelForDelete != null && COLL[DModelForDelete.Numb] is DModel)
+            if (DModelForDelete != null && COLL[DModelForDelete.Numb] is DModel dmod)
             {
-                COLL[DModelForDelete.Numb] = null;
+                int numb = DModelForDelete.Numb;
+                COLL[DModelForDelete.Numb] = new Empty
+                {
+                    NUM = numb,
+                };
             }
         }
         public int SelScheme
@@ -307,14 +313,39 @@ namespace KursWork.ViewModels
 
             return res;
         }
+
+        private void Delete()
+        {
+            string path = Directory.GetCurrentDirectory() + "\\db.db";
+            if (File.Exists(path))
+            {
+                using (var connection = new SqliteConnection("Data Source = " + path))
+                {
+                    connection.Open();
+                    SqliteCommand command = new SqliteCommand();
+                    command.Connection = connection;
+                    for(int i = 0; i < 1000; i++)
+                    {
+                    string sql = $"DELETE FROM Catalog WHERE id = {i}";
+                    command = new SqliteCommand(sql, connection);
+                    command.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+
         public void Save()
         {
-            using (var connection = new SqliteConnection($"Data Source=C:\\Users\\Rik\\source\\repos\\KursWork\\{ProjName}.db"))
+
+            Delete();
+            string path = Directory.GetCurrentDirectory() + "\\db.db";
+            using (var connection = new SqliteConnection("Data Source = " + path))
             {
                 connection.Open();
                 SqliteCommand command = new SqliteCommand();
                 command.Connection = connection;
-                command.CommandText = "CREATE TABLE IF NOT EXISTS Catalog (id INTEGER PRIMARY KEY AUTOINCREMENT,Name TEXT,BOut INTEGER,FInp INTEGER,FInpC INTEGER,FStartPoint TEXT,Numb INTEGER,OInpC INTEGER,OStartPoint TEXT,SInp INTEGER,SInpC INTEGER,SStartPoint TEXT,StartPoint TEXT,SidePoint TEXT,SideC INTEGER,Side INTEGER, VisibleQ INTEGER,FPoint TEXT,SPoint TEXT,SLinkNumb TEXT, ELinkNumb TEXT,SInpNumb TEXT,EInpNumb TEXT)";
+
+                command.CommandText = "CREATE TABLE IF NOT EXISTS Catalog (id INTEGER PRIMARY KEY AUTOINCREMENT ,Name TEXT,BOut INTEGER,FInp INTEGER,FInpC INTEGER,FStartPoint TEXT,Numb INTEGER,OInpC INTEGER,OStartPoint TEXT,SInp INTEGER,SInpC INTEGER,SStartPoint TEXT,StartPoint TEXT,SidePoint TEXT,SideC INTEGER,Side INTEGER, VisibleQ INTEGER,FPoint TEXT,SPoint TEXT,SLinkNumb TEXT, ELinkNumb TEXT,SInpNumb TEXT,EInpNumb TEXT)";
                 command.ExecuteNonQuery();
                 for(int i = 0;i<COLL.Count();i++)
                 {
@@ -322,7 +353,7 @@ namespace KursWork.ViewModels
                     { 
                         if(dModel is AndM ands)
                         {
-                            command.CommandText = $"INSERT INTO Catalog (Name,BOut,FInp,FInpC,FStartPoint,Numb,OInpC,OStartPoint,SInp,SInpC,SStartPoint,StartPoint) VALUES ('{dModel.Name}','{dModel.BOut}','{dModel.FInp}','{dModel.FInpC}','{dModel.FStartPoint}','{dModel.Numb}','{dModel.OInpC}','{dModel.OStartPoint}','{dModel.SInp}','{dModel.SInpC}','{dModel.SStartPoint}','{dModel.StartPoint}')";
+                            command.CommandText = $"INSERT INTO Catalog (id,Name,BOut,FInp,FInpC,FStartPoint,Numb,OInpC,OStartPoint,SInp,SInpC,SStartPoint,StartPoint) VALUES ('{dModel.Numb}','{dModel.Name}','{dModel.BOut}','{dModel.FInp}','{dModel.FInpC}','{dModel.FStartPoint}','{dModel.Numb}','{dModel.OInpC}','{dModel.OStartPoint}','{dModel.SInp}','{dModel.SInpC}','{dModel.SStartPoint}','{dModel.StartPoint}')";
                         }
                         if (dModel is Lamp lamp)
                         {
@@ -355,22 +386,30 @@ namespace KursWork.ViewModels
                         command.CommandText = $"INSERT INTO Catalog (Name,Numb,FPoint,SPoint,SLinkNumb,ELinkNumb,SInpNumb,EInpNumb) VALUES ('{link.Name}','{link.Numb}','{link.FPoint}','{link.SPoint}','{link.SLinkNumb}','{link.ELinkNumb}','{link.SInpNumb}','{link.EInpNumb}')";
                         command.ExecuteNonQuery();
                     }
+                    if (COLL[i] is Empty empty)
+                    {
+                        command.CommandText = $"INSERT INTO Catalog (Name, Numb) VALUES ('Empty','{empty.NUM}')";
+                        command.ExecuteNonQuery();
+                    }
                 }
+                connection.Close();
+                command.Connection = connection;
             }
+
         }
         public void Read()
         {
-            bool BoutB;
-            bool FInpB;
-            bool FInpCB;
-            Point FStartPointB;
+            bool BoutB = false;
+            bool FInpB = false;
+            bool FInpCB = false;
+            Point FStartPointB = new Point(0, 0);
             Int64 Numb;
-            bool OInpCB;
-            Point OStartPointB;
-            bool SInpB;
-            bool SInpCB;
-            Point SStartPointB;
-            Point StartPointB;
+            bool OInpCB = false;
+            Point OStartPointB = new Point(0, 0);
+            bool SInpB = false;
+            bool SInpCB = false;
+            Point SStartPointB = new Point(0, 0);
+            Point StartPointB = new Point(0, 0);
             Point SidePointB = new Point(0, 0);
             bool SideCB = false;
             bool SideB = false;
@@ -381,9 +420,13 @@ namespace KursWork.ViewModels
             Int64 ELinkNumbB=0;
             Int64 SInpNumbB=0;
             Int64 EInpNumbB=0;
-            COLL.Clear();
+            for(int i = 0; i < COLL.Count(); i++)
+            {
+                COLL[i] = null;
+            }
             string sqlExpression = "SELECT * FROM Catalog";
-            using (var connection = new SqliteConnection($"Data Source=C:\\Users\\Rik\\source\\repos\\KursWork\\{ProjName}.db"))
+            string path = Directory.GetCurrentDirectory() + "\\db.db";
+            using (var connection = new SqliteConnection("Data Source = " + path))
             {
                 connection.Open();
 
@@ -395,16 +438,16 @@ namespace KursWork.ViewModels
                         while (reader.Read())   // построчно считываем данные
                         {
                             string name = (string)reader["Name"];
-                            string Bout = (string)reader["BOut"];
-                            string FInp = (string)reader["FInp"];
-                            string FInpC = (string)reader["FInpC"];
-                            string OInpC = (string)reader["OInpC"];
-                            string OStartPoint = (string)reader["OStartPoint"];
-                            string FStartPoint = (string)reader["FStartPoint"];
-                            string SInp = (string)reader["SInp"];
-                            string SInpC = (string)reader["SInpC"];
-                            string SStartPoint = (string)reader["SStartPoint"];
-                            string StartPoint = (string)reader["StartPoint"];
+                            object Bout = reader["BOut"];
+                            object FInp = reader["FInp"];
+                            object FInpC = reader["FInpC"];
+                            object OInpC = reader["OInpC"];
+                            object OStartPoint = reader["OStartPoint"];
+                            object FStartPoint = reader["FStartPoint"];
+                            object SInp = reader["SInp"];
+                            object SInpC = reader["SInpC"];
+                            object SStartPoint = reader["SStartPoint"];
+                            object StartPoint = reader["StartPoint"];
                             object VisLamp = reader["VisibleQ"];
                             Numb = (Int64)reader["Numb"];
                             object SidePoint = reader["SidePoint"];
@@ -416,16 +459,52 @@ namespace KursWork.ViewModels
                             object SLinkNumb = reader["SLinkNumb"];
                             object ELinkNumb = reader["ELinkNumb"];
                             object EInpNumb = reader["EInpNumb"];
-                            if (Bout == "False") BoutB = false; else BoutB = true;
-                            if (FInp == "False") FInpB = false; else FInpB = true;
-                            if (FInpC == "False") FInpCB = false; else FInpCB = true;
-                            FStartPointB = StrToPoint(FStartPoint);
-                            if (OInpC == "False") OInpCB = false; else OInpCB = true;
-                            OStartPointB = StrToPoint(OStartPoint);
-                            if (SInp == "False") SInpB = false; else SInpB = true;
-                            if (SInpC == "False") SInpCB = false; else SInpCB = true;
-                            SStartPointB = StrToPoint(SStartPoint);
-                            StartPointB = StrToPoint(StartPoint);
+                            
+                            
+                            if (Bout != DBNull.Value)
+                            {
+                                if ((string)Bout == "False") BoutB = false; else BoutB = true;
+                            }
+
+                            if (FInp != DBNull.Value)
+                            {
+                                if ((string)FInp == "False") FInpB = false; else FInpB = true;
+                            }
+
+                            if (FInpC != DBNull.Value)
+                            {
+                                if ((string)FInpC == "False") FInpCB = false; else FInpCB = true;
+                            }
+                            
+                            if(OInpC != DBNull.Value)
+                            {
+                                if ((string)OInpC == "False") OInpCB = false; else OInpCB = true;
+                            }
+                            if(OStartPoint != DBNull.Value)
+                            {
+                                OStartPointB = StrToPoint((string)OStartPoint);
+                            }
+                            
+                            if(FStartPoint != DBNull.Value)
+                            {
+                                FStartPointB = StrToPoint((string)FStartPoint);
+                            }
+                            if (SInp != DBNull.Value)
+                            {
+                                if (SInp == "False") SInpB = false; else SInpB = true;
+                            }
+                            if(SInpC != DBNull.Value)
+                            {
+                                if (SInpC == "False") SInpCB = false; else SInpCB = true;
+                            }
+                            if(SStartPoint != DBNull.Value)
+                            {
+                                SStartPointB = StrToPoint((string)SStartPoint);
+                            }
+                            if(StartPoint != DBNull.Value)
+                            {
+                                StartPointB = StrToPoint((string)StartPoint);
+                            }
                             if(VisLamp != DBNull.Value)
                             {
                                 if ((string)VisLamp == "False") VISQ = false; else VISQ = true;
@@ -452,21 +531,28 @@ namespace KursWork.ViewModels
                             }
                             if(SInpNumb != DBNull.Value)
                             {
-                                SInpNumbB = (long)SInpNumb;
+                                SInpNumbB = Int64.Parse((string)SInpNumb);
                             }
 
                             if (SLinkNumb != DBNull.Value)
                             {
-                                SLinkNumbB = (long)SLinkNumb;
+                                SLinkNumbB = Int64.Parse((string)SLinkNumb);
                             }
 
                             if (ELinkNumb != DBNull.Value)
                             {
-                                ELinkNumbB = (long)ELinkNumb;
+                                ELinkNumbB = Int64.Parse((string)ELinkNumb);
                             }
                             if (EInpNumb != DBNull.Value)
                             {
-                                EInpNumbB = (long)EInpNumb;
+                                EInpNumbB = Int64.Parse((string)EInpNumb);
+                            }
+                            if(name == "Empty")
+                            {
+                                COLL.Add(new Empty
+                                {
+                                    NUM = (int)Numb,
+                                });
                             }
                             if (name == "And")
                             {
@@ -602,12 +688,17 @@ namespace KursWork.ViewModels
                                     SLinkNumb = (int)SLinkNumbB,
                                     ELinkNumb = (int)ELinkNumbB,
                                     SInpNumb = (int) SInpNumbB,
-                                    EInpNumb = (int) ELinkNumbB,
+                                    EInpNumb = (int) EInpNumbB,
                                 });
                             }
                         }
                     }
+                    command.Connection.Close();
+                    connection.Close();
+                    reader.Close();
                 }
+                command.Connection.Close();
+                connection.Close();
             }
         }
     }

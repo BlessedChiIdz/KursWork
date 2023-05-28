@@ -282,6 +282,8 @@
 						
 					</DataTemplate>
 					
+					
+					
 					<DataTemplate DataType="{x:Type model:Lamp}">
 						<Canvas>
 						<Image Source="C:\\Users\\Rik\\source\repos\\KursWork\\KursWork\\Assets\\2023-05-22_02-24-03.png" IsVisible="{Binding !VisibleQ}">
@@ -313,6 +315,10 @@
 							</Rectangle>
 
 						</Canvas>
+					</DataTemplate>
+
+					<DataTemplate DataType="{x:Type model:Empty}">
+
 					</DataTemplate>
 
 				</ItemsControl.DataTemplates>
